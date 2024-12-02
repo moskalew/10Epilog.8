@@ -24,17 +24,36 @@ export const App = ({ message }) => {
 export class OldApp extends Component {
 	// state = window.innerWidth; Как вариант, можно объявить состояние здесь
 
-	constructor() {
-		super();
+	constructor(props) {
+		super(props);
+
+		// console.log(props.message); аналог useLayoutEffect()
+
 		this.state = {
 			screenWidth: window.innerWidth,
 		}; // Но обычно объявляют в конструкторе
+
+		// this.updateScreenWidth = this.updateScreenWidth.bind(this);
+	}
+
+	updateScreenWidth = () => {
+		this.setState({ screenWidth: window.innerWidth });
+	};
+
+	componentDidMount() {
+		console.log(this.props.message);
+
+		window.removeEventListener("resize", this.updateScreenWidth);
+	}
+
+	componentWillUnmount() {
+		window.removeEventListener("resize", this.updateScreenWidth);
 	}
 
 	render() {
 		return (
 			<div className={styles.App}>
-				{/*{message}*/}: {this.state.screenWidth}
+				{this.props.message}: {this.state.screenWidth}
 			</div>
 		);
 	}
